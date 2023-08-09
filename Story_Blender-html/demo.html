@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StoryBlender</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f0f0f0;
+  }
+
+  .container {
+    text-align: center;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .logo {
+    width: 60px;
+    height: auto;
+    margin-bottom: 10px;
+  }
+
+  h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+
+  .story-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .input-container {
+    display: flex;
+    align-items: center;
+  }
+
+  input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+
+  .book-icons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  .book-icon {
+    width: 30px;
+    height: auto;
+  }
+
+  #generateButton {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: purple;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="title">
+      <img src="images/logo.png" alt="StoryBlender Logo" class="logo">
+      <h1>StoryBlender</h1>
+    </div>
+    <h2>스토리 이름을 입력하세요</h2>
+    <div class="story-section">
+      <div class="input-container">
+        <img src="images/book-icon.png" alt="Book Icon" class="book-icon">
+        <input type="text" id="story1" placeholder="스토리 1">
+      </div>
+      <div class="input-container">
+        <img src="images/book-icon.png" alt="Book Icon" class="book-icon">
+        <input type="text" id="story2" placeholder="스토리 2">
+      </div>
+      <button id="generateButton">생성</button>
+    </div>
+  </div>
+</body>
+</html>
