@@ -1,11 +1,11 @@
 import requests
 from bs4 import BeautifulSoup
-#import openai
+import openai
 import json
 import pandas as pd
 
 # OpenAI API 인증
-#openai.api_key = 'YOUR_OPENAI_API_KEY'
+openai.api_key = ''
 
 def movieData(query):
     key=''
@@ -28,13 +28,11 @@ def movieData(query):
 
 def chat_with_gpt3(query):
     
-    response = openai.Completion.create(
-        engine="text-davinci-002",  
-        prompt=query,
-        max_tokens=100, 
-        stop=["\n"] 
-    )
-    return response.choices[0].text.strip()
+    response = openai.ChatCompletion.create(
+    model="gpt-3.5-turbo",
+    messages=[{"role": "user", "content": query}]
+)
+    return response.choices[0].message.content
 
 def main():
     # 사용자로부터 입력 받기
