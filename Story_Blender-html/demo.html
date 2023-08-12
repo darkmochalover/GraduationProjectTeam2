@@ -4,6 +4,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>StoryBlender</title>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function updateResult() {
+            var input1 = $("#story1").val();
+            var input2 = $("#story2").val();
+
+            $.ajax({
+                type: "POST",
+                url: "/process",
+                data: { input1: input1, input2: input2 },
+                success: function(response) {
+                    $("#result").text(response);
+                }
+            });
+        }
+    </script>
 <style>
   body {
     font-family: Arial, sans-serif;
@@ -93,7 +109,8 @@
         <img src="images/book-icon.png" alt="Book Icon" class="book-icon">
         <input type="text" id="story2" placeholder="스토리 B 제목">
       </div>
-      <button id="generateButton">생성</button>
+      <button id="generateButton" onclick="updateResult()">생성</button>
+      <p id="result"></p>
     </div>
   </div>
 </body>
