@@ -3,10 +3,10 @@ from bs4 import BeautifulSoup
 import openai
 import json
 import pandas as pd
-from flask import Flask,render_template,request
+from flask import Flask,render_template,request,redirect, url_for
 
 # OpenAI API 인증
-openai.api_key = ''
+openai.api_key = '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'
 
 app = Flask(__name__)
 
@@ -19,7 +19,15 @@ def process():
     user_input_1 = request.form['input1']
     user_input_2=request.form['input2']
     processed_result = process_input(user_input_1,user_input_2)
-    return f"Processed result: {processed_result}"
+    return redirect(url_for('show_result', input1=user_input_1, input2=user_input_2, processed_result=processed_result))
+
+@app.route('/result')
+def show_result():
+    input1 = request.args.get('input1')
+    input2 = request.args.get('input2')
+    processed_result = process_input(input1,input2)
+    return render_template('result.html', input1=input1, input2=input2, processed_result=processed_result)
+
 
 def process_input(input_data_1,input_data_2):
     # 사용자로부터 입력 받기
@@ -42,7 +50,7 @@ def process_input(input_data_1,input_data_2):
     return chat_response
 
 def movieData(query):
-    key=''
+    key='SC62F747X0XX7EZOW4VP'
     
     url='http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json.jsp?collection=kmdb_new&detail=Y'
     r=requests.post(url,data={'title':query,'ServiceKey':key,'createDts':'2018','createDts':'2018','val001':'2023','val002':'01'})

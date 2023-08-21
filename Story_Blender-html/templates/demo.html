@@ -5,21 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>StoryBlender</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        function updateResult() {
-            var input1 = $("#story1").val();
-            var input2 = $("#story2").val();
+  <script>
+    function navigateToResult() {
+      var input1 = $("#story1").val();
+      var input2 = $("#story2").val();
+      var processed_result = $("#result").text();
 
-            $.ajax({
-                type: "POST",
-                url: "/process",
-                data: { input1: input1, input2: input2 },
-                success: function(response) {
-                    $("#result").text(response);
-                }
-            });
-        }
-    </script>
+      // 페이지 이동
+      window.location.href = `/result?input1=${input1}&input2=${input2}&processed_result=${processed_result}`;
+    }
+  </script>
 <style>
   body {
     font-family: Arial, sans-serif;
@@ -96,26 +91,22 @@
 <body>
   <div class="container">
     <div class="title">
-      <img src="images2/logo.png" alt="StoryBlender Logo" class="logo">
+      <img src="static/images2/logo.png" alt="StoryBlender Logo" class="logo">
       <h1>StoryBlender</h1>
     </div>
     <h4>스토리 A의 주인공이<br>스토리 B로 들어갑니다 !</h4>
     <div class="story-section">
       <div class="input-container">
-        <img src="images/book-icon.png" alt="Book Icon" class="book-icon">
+        <img src="static/images/book-icon.png" alt="Book Icon" class="book-icon">
         <input type="text" id="story1" placeholder="스토리 A 제목">
       </div>
       <div class="input-container">
-        <img src="images/book-icon.png" alt="Book Icon" class="book-icon">
+        <img src="static/images/book-icon.png" alt="Book Icon" class="book-icon">
         <input type="text" id="story2" placeholder="스토리 B 제목">
       </div>
-      <a class="nav-link" href="book/book.html" >
-        <button id="generateButton" onclick="updateResult()">
-          생성
-        </button>
-      </a>
+      <button id="generateButton" onclick="navigateToResult()">생성</button>
       
-      <p id="result"></p>
+      
     </div>
   </div>
 </body>
