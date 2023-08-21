@@ -6,7 +6,7 @@ import pandas as pd
 from flask import Flask,render_template,request,redirect, url_for
 
 # OpenAI API 인증
-openai.api_key = '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'
+openai.api_key = ''
 
 app = Flask(__name__)
 
@@ -50,7 +50,7 @@ def process_input(input_data_1,input_data_2):
     return chat_response
 
 def movieData(query):
-    key='SC62F747X0XX7EZOW4VP'
+    key=''
     
     url='http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json.jsp?collection=kmdb_new&detail=Y'
     r=requests.post(url,data={'title':query,'ServiceKey':key,'createDts':'2018','createDts':'2018','val001':'2023','val002':'01'})
