@@ -8,11 +8,12 @@
   <script>
     function navigateToResult() {
       var input1 = $("#story1").val();
-      var input2 = $("#story2").val();
+      var input2 = $("#character").val();
+      var input3 = $("#story2").val();
       var processed_result = $("#result").text();
 
       // 페이지 이동
-      window.location.href = `/result?input1=${input1}&input2=${input2}&processed_result=${processed_result}`;
+      window.location.href = `/result?input1=${input1}&input2=${input2}&input3=${input3}&processed_result=${processed_result}`;
     }
   </script>
 <style>
@@ -94,11 +95,15 @@
       <img src="static/images2/logo.png" alt="StoryBlender Logo" class="logo">
       <h1>StoryBlender</h1>
     </div>
-    <h4>스토리 A의 주인공이<br>스토리 B로 들어갑니다 !</h4>
+    <h4>스토리 A의 입력하신 인물이 <br>스토리 B로 들어갑니다 !</h4>
     <div class="story-section">
       <div class="input-container">
         <img src="static/images/book-icon.png" alt="Book Icon" class="book-icon">
         <input type="text" id="story1" placeholder="스토리 A 제목">
+      </div>
+      <div class="input-container">
+        <img src="static/images/book-icon.png" alt="Book Icon" class="book-icon">
+        <input type="text" id="character" placeholder="스토리 A 인물">
       </div>
       <div class="input-container">
         <img src="static/images/book-icon.png" alt="Book Icon" class="book-icon">
