@@ -5,6 +5,7 @@ import json
 import pandas as pd
 from flask import Flask,render_template,request,redirect, url_for
 
+
 # OpenAI API 인증
 openai.api_key = ''
 
@@ -28,7 +29,7 @@ def show_result():
     input2 = request.args.get('input2')
     input3 = request.args.get('input3')
     processed_result = process_input(input1,input2,input3)
-    return render_template('result.html', input1=input1, input2=input2,input3=input3, processed_result=processed_result)
+    return render_template('new_result.html', input1=input1, input2=input2,input3=input3, processed_result=processed_result)
 
 
 def process_input(input_data_1,input_data_2,input_data_3):
