@@ -7,9 +7,11 @@
         {
             "type": "chrome",
             "request": "launch",
-            "name": "localhost에 대해 Chrome 시작",
-            "url": "http://localhost:8080",
-            "webRoot": "${workspaceFolder}/Story_Blender-html"
+            "name": "Launch Chrome against localhost",
+            //"url": "http://localhost:8888",
+            //"webRoot": "${workspaceFolder}"
+            //"webRoot": "${workspaceFolder}/Story_Blender-html"
+            "file":"${workspaceFolder}/Story_Blender-html/templates/index.html"
         }
     ]
 }
