@@ -3,13 +3,21 @@ from bs4 import BeautifulSoup
 import openai
 import json
 import pandas as pd
-from flask import Flask,render_template,request,redirect, url_for
+from flask import Flask,render_template,request,redirect, url_for,session,Response
+import json
+import requests
+import torch
+import os 
+from diffusers import StableDiffusionPipeline
+import io
+from PIL import Image
 
 
 # OpenAI API 인증
 openai.api_key = ''
 
 app = Flask(__name__)
+app.secret_key = os.urandom(24)
 
 @app.route('/')
 def index():
@@ -21,15 +29,45 @@ def process():
     user_input_2=request.form['input2']
     user_input_3=request.form['input3']
     processed_result = process_input(user_input_1,user_input_2,user_input_3)
-    return redirect(url_for('show_result', input1=user_input_1, input2=user_input_2,input3=user_input_3, processed_result=processed_result))
+    print(processed_result)
+    session['processed_result'] = processed_result
+    session['input_1'] = user_input_1
+    session['input_2'] = user_input_2
+    session['input_3'] = user_input_3
+    return redirect(url_for('generate_image'))
+
+@app.route('/generate_image')
+def generate_image():
+    # 세션에서 텍스트 가져오기
+    processed_result = session.get('processed_result', '')
+    print(processed_result)
+    # 텍스트 요약 및 번역
+    summary_text = summary(processed_result)
+    translated_text = get_translate(summary_text)
+
+    # 이미지 생성
+    pipe = StableDiffusionPipeline.from_pretrained("CompVis/stable-diffusion-v1-4", revision="fp16", torch_dtype=torch.float16)
+    
+    image = pipe(translated_text).images[0]
+
+    session['image_stream'] = convert_image_to_stream(image)
+    
+    return redirect(url_for('result'))
 
 @app.route('/result')
-def show_result():
-    input1 = request.args.get('input1')
-    input2 = request.args.get('input2')
-    input3 = request.args.get('input3')
-    processed_result = process_input(input1,input2,input3)
+def result():
+    input1 = session.get('input_1', '')
+    input2 = session.get('input_2', '')
+    input3 = session.get('input_3', '')
+    processed_result = session.get('processed_result', '')
+    
     return render_template('new_result.html', input1=input1, input2=input2,input3=input3, processed_result=processed_result)
+
+@app.route('/image')
+def image():
+    image_stream = session.get('image_stream', '')
+    return Response(image_stream, mimetype='image/png')
+
 
 
 def process_input(input_data_1,input_data_2,input_data_3):
@@ -80,7 +118,74 @@ def chat_with_gpt3(query):
     messages=[{"role": "user", "content": query}]
 )
     return response.choices[0].message.content
+def get_translate(text):
+    client_id = ""
+    client_secret = ""
 
+    data = {'text': text,
+            'source': 'ko',
+            'target': 'en'}
+
+    url = "https://openapi.naver.com/v1/papago/n2mt"
+
+    header = {"X-Naver-Client-Id": client_id,
+              "X-Naver-Client-Secret": client_secret}
+
+    response = requests.post(url, headers=header, data=data)
+    rescode = response.status_code
+
+    if (rescode == 200):
+        send_data = response.json()
+        trans_data = (send_data['message']['result']['translatedText'])
+        return trans_data
+    else:
+        print("Error Code:", rescode)
+
+
+def summary(text):
+    client_id = ""
+    client_secret = ""
+    url = 'https://naveropenapi.apigw.ntruss.com/text-summary/v1/summarize'
+
+    headers = {
+        'Accept': 'application/json;UTF-8',
+        'Content-Type': 'application/json;UTF-8',
+        'X-NCP-APIGW-API-KEY-ID': client_id,
+        'X-NCP-APIGW-API-KEY': client_secret
+    }
+
+    data = {
+        "document": {
+            "content": text
+        },
+        "option": {
+            "language": "ko",
+            "model": "general",
+            "tone": 0,
+            "summaryCount": 1
+        }
+    }
+
+    response = requests.post(url, headers=headers, data=json.dumps(data).encode('UTF-8'))
+    rescode = response.status_code
+    if (rescode == 200):
+        print(response.text)
+        return response.text
+    else:
+        print("Error : " + response.text)
+        return "Error"
+
+def convert_image_to_stream(image):
+    """
+    Converts a PIL Image object into a byte stream that can be stored in a session.
+    
+    :param image: A PIL Image object.
+    :return: A byte stream of the image.
+    """
+    img_byte_arr = io.BytesIO()
+    image.save(img_byte_arr, format='PNG')  
+    img_byte_arr = img_byte_arr.getvalue()
+    return img_byte_arr
 def main():
     # 사용자로부터 입력 받기
     user_input=input("들어가는 영화 첫번째 제목")
