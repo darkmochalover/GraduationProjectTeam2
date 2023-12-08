@@ -48,7 +48,9 @@ def generate_image():
     translated_text = get_translate(summary_text)
 
     # 이미지 생성
+
     pipe = StableDiffusionPipeline.from_pretrained("CompVis/stable-diffusion-v1-4", variant='fp16').to("cuda")
+
     
     image = pipe(translated_text).images[0]
 
