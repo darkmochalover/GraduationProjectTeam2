@@ -13,6 +13,8 @@ import io
 from PIL import Image
 import uuid
 
+
+
 # OpenAI API 인증
 openai.api_key = ''
 
@@ -46,9 +48,7 @@ def generate_image():
     translated_text = get_translate(summary_text)
 
     # 이미지 생성
-
     pipe = StableDiffusionPipeline.from_pretrained("CompVis/stable-diffusion-v1-4", variant='fp16').to("cuda")
-
     
     image = pipe(translated_text).images[0]
 
@@ -126,7 +126,7 @@ def chat_with_gpt3(query):
     return response.choices[0].message.content
 def get_translate(text):
     client_id = ""
-    client_secret = ""
+    client_secret = "IEB3mtsgfL"
 
     data = {'text': text,
             'source': 'ko',
