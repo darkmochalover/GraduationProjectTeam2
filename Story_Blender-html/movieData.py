@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import openai
 import json
 import pandas as pd
-from flask import Flask,render_template,request,redirect, url_for,session,Response
+from flask import Flask,render_template,request,redirect, url_for,session,Response,send_file
 import json
 import requests
 import torch
@@ -11,6 +11,8 @@ import os
 from diffusers import StableDiffusionPipeline
 import io
 from PIL import Image
+import uuid
+
 
 
 # OpenAI API 인증
@@ -46,11 +48,16 @@ def generate_image():
     translated_text = get_translate(summary_text)
 
     # 이미지 생성
-    pipe = StableDiffusionPipeline.from_pretrained("CompVis/stable-diffusion-v1-4", revision="fp16", torch_dtype=torch.float16)
+<<<<<<< HEAD
+    pipe = StableDiffusionPipeline.from_pretrained("CompVis/stable-diffusion-v1-4", variant='fp16').to("cuda")
+=======
+    pipe = StableDiffusionPipeline.from_pretrained("CompVis/stable-diffusion-v1-4", variant='fp16')
+>>>>>>> 0ca37ecc4cf13d88821fd71ffa22d39671ea3966
     
     image = pipe(translated_text).images[0]
 
-    session['image_stream'] = convert_image_to_stream(image)
+    image_path = save_image(image)
+    session['image_path'] = image_path
     
     return redirect(url_for('result'))
 
@@ -65,8 +72,11 @@ def result():
 
 @app.route('/image')
 def image():
-    image_stream = session.get('image_stream', '')
-    return Response(image_stream, mimetype='image/png')
+    image_path = session.get('image_path', '')
+    if image_path:
+        return send_file(image_path, mimetype='image/png')
+    else:
+        return "No image found", 404
 
 
 
@@ -175,17 +185,23 @@ def summary(text):
         print("Error : " + response.text)
         return "Error"
 
-def convert_image_to_stream(image):
+
+def save_image(image):
     """
-    Converts a PIL Image object into a byte stream that can be stored in a session.
+    Saves a PIL Image object as a temporary file and returns the file path.
     
     :param image: A PIL Image object.
-    :return: A byte stream of the image.
+    :return: Path of the saved image file.
     """
-    img_byte_arr = io.BytesIO()
-    image.save(img_byte_arr, format='PNG')  
-    img_byte_arr = img_byte_arr.getvalue()
-    return img_byte_arr
+    folder = "temp_images"
+    if not os.path.exists(folder):
+        os.makedirs(folder)  # 폴더가 없다면 생성
+
+    filename = os.path.join(folder, f"{uuid.uuid4()}.png")
+    image.save(filename)
+    return filename
+
+
 def main():
     # 사용자로부터 입력 받기
     user_input=input("들어가는 영화 첫번째 제목")
@@ -206,3 +222,4 @@ def main():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
