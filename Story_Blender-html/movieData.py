@@ -13,8 +13,6 @@ import io
 from PIL import Image
 import uuid
 
-
-
 # OpenAI API 인증
 openai.api_key = ''
 
@@ -220,4 +218,3 @@ def main():
 
 if __name__ == "__main__":
     app.run(debug=True)
-
