@@ -17,7 +17,7 @@ from MoverScore import mover_test_copy_update
 
 
 # OpenAI API 인증
-openai.api_key = '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'
+openai.api_key = ''
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
@@ -111,7 +111,7 @@ def process_input(input_data_1,input_data_2,input_data_3):
     return chat_response
 
 def movieData(query):
-    key='SC62F747X0XX7EZOW4VP'
+    key=''
     
     url='http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json.jsp?collection=kmdb_new&detail=Y'
     r=requests.post(url,data={'title':query,'ServiceKey':key,'createDts':'2018','createDts':'2018','val001':'2023','val002':'01'})
@@ -137,8 +137,8 @@ def chat_with_gpt3(query):
 )
     return response.choices[0].message.content
 def get_translate(text):
-    client_id = "vO4g7SxC8Of6_e_0CPYi"
-    client_secret = "IEB3mtsgfL"
+    client_id = ""
+    client_secret = ""
 
     data = {'text': text,
             'source': 'ko',
@@ -161,8 +161,8 @@ def get_translate(text):
 
 
 def summary(text):
-    client_id = "svr7wrqkpj"
-    client_secret = "9MseHSwnnO3Q2OJYzDykxiUb9jeA24G7CeJILj4O"
+    client_id = ""
+    client_secret = ""
     url = 'https://naveropenapi.apigw.ntruss.com/text-summary/v1/summarize'
 
     headers = {
