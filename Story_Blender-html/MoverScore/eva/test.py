@@ -7,8 +7,11 @@ import sys
 def test_metric(data):
     from eva.tokenizer import SimpleTokenizer, PretrainedTokenizer
     tokenizer = SimpleTokenizer(method="nltk")
-    eva_path = "/Users/ajin/Desktop/2023/졸작 코드/평가모델/OpenMEVA"
-
+    
+    eva_path = "Story_Blender-html/MoverScore/OpenMEVA"
+    
+    # os.chdir("")
+    
     metric_score = {}
 
     from eva.bleu import BLEU
