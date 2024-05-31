@@ -37,7 +37,7 @@ root
 - 설명
   - `MoverScore`: 텍스트 맥락 평가 Metric
   - `static`, `templates`: html, cs, js 관련 코드
-  - `drawing_picture.py`: 이야기 생성 API 호출 코드
+  - `drawing_picture.py`: 이미지 생성 API 호출 코드
   - `movieData.py`: 영화 데이터 API 호출 코드
   - `new_result.html`: 테스트용 샘플 페이지
 
