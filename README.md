@@ -52,7 +52,7 @@ root
 ## <span id="usage">실행 방법</span>
 1. 해당 레포지토리를 git clone을 통해 로컬 환경에 다운로드 <br>
 2. 위에서 언급한 외부 API 키를 입력 <br>
-3. index.html 실행 <br>
+3. `Story_Blender-html/templates/index.html` 실행 <br>
 
 ## <span id="result">예시 실행 결과</span>
 ![image](https://github.com/darkmochalover/GraduationProjectTeam2/assets/77332981/c91e2365-5941-4981-880e-458140b2f660)
