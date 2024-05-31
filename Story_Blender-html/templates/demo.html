@@ -10,10 +10,11 @@
       var input1 = $("#story1").val();
       var input2 = $("#character").val();
       var input3 = $("#story2").val();
+      var input4 = $("#mood").val();
       var processed_result = $("#result").text();
 
       // 페이지 이동
-      window.location.href = `/result?input1=${input1}&input2=${input2}&input3=${input3}&processed_result=${processed_result}`;
+      window.location.href = `/result?input1=${input1}&input2=${input2}&input3=${input3}&input4=${input4}&processed_result=${processed_result}`;
     }
   </script>
 <style>
@@ -110,6 +111,10 @@
       <div class="input-container">
         <img src=".././static/images/book-icon.png" alt="Book Icon" class="book-icon">
         <input type="text" name="input3" id="story2" placeholder="스토리 B 제목">
+      </div>
+      <div class="input-container">
+        <img src=".././static/images/book-icon.png" alt="Book Icon" class="book-icon">
+        <input type="text" name="input4" id="mood" placeholder="스토리 전개 장르">
       </div>
       <button type="submit" id="generateButton">생성</button>
       
