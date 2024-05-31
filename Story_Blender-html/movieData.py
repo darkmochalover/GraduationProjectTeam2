@@ -12,6 +12,9 @@ from diffusers import StableDiffusionPipeline
 import io
 from PIL import Image
 import uuid
+from MoverScore import mover_test_copy_update
+
+
 
 # OpenAI API 인증
 openai.api_key = ''
@@ -34,6 +37,7 @@ def process():
     session['input_1'] = user_input_1
     session['input_2'] = user_input_2
     session['input_3'] = user_input_3
+    
     return redirect(url_for('generate_image'))
 
 @app.route('/generate_image')
@@ -42,13 +46,11 @@ def generate_image():
     processed_result = session.get('processed_result', '')
     print(processed_result)
     # 텍스트 요약 및 번역
-    summary_text = summary(processed_result)
-    translated_text = get_translate(summary_text)
+    #summary_text = summary(processed_result)
+    translated_text = get_translate(session['input_3']+"에 들어간 "+session['input_2'] )
 
     # 이미지 생성
-
-    pipe = StableDiffusionPipeline.from_pretrained("CompVis/stable-diffusion-v1-4", variant='fp16').to("cuda")
-
+    pipe = StableDiffusionPipeline.from_pretrained("CompVis/stable-diffusion-v1-4", variant='fp16')
     
     image = pipe(translated_text).images[0]
 
@@ -90,12 +92,22 @@ def process_input(input_data_1,input_data_2,input_data_3):
     print(input_data_3)
 
     # 가져온 정보를 기반으로 챗지피티에게 문장 전달 및 답변 받기
-    chat_input = f"{input_data_1}"+"에 등장하는 "+f"{input_data_2}"+"가 "+f"{input_data_3}"+"세계에 들어가면 어떻게 될지에 관한 소설을 적어줘. "+f"{input_data_1}"+"의 줄거리는 "+f"{movie_info_1}"+"이고 "+f"{input_data_3}"+"의 줄거리는 "+f"{movie_info_2}"+"야.\n"
+    chat_input = f"너가 소설을 쓰는 작가라고 생각하고 {input_data_1}"+"에 등장하는 "+f"{input_data_2}"+"가 "+f"{input_data_3}"+"세계에 들어가면 어떻게 될지에 관한 소설만 적어줘. 최대한 길게 적어줘."+f"{input_data_1}"+"의 줄거리는 "+f"{movie_info_1}"+"이고 "+f"{input_data_3}"+"의 줄거리는 "+f"{movie_info_2}"+"야.\n"
     print(chat_input)
     chat_response = chat_with_gpt3(chat_input)
 
     # 챗지피티의 답변 출력
     print("챗지피티: ", chat_response)
+    score=mover_test_copy_update.get_score(chat_response)
+    print(score)
+    if (score<0.8):
+        chat_input = f"이전에 너가 써준 소설의 점수는 {score}야. 너가 소설을 쓰는 작가라고 생각하고 {input_data_1}"+"에 등장하는 "+f"{input_data_2}"+"가 "+f"{input_data_3}"+"세계에 들어가면 어떻게 될지에 관한 소설만 다시 적어줘. 최대한 길게 적어줘."+f"{input_data_1}"+"의 줄거리는 "+f"{movie_info_1}"+"이고 "+f"{input_data_3}"+"의 줄거리는 "+f"{movie_info_2}"+"야.\n"
+        print(chat_input)
+        chat_response = chat_with_gpt3(chat_input)
+        score=mover_test_copy_update.get_score(chat_response)
+        
+    
+    
     return chat_response
 
 def movieData(query):
@@ -218,3 +230,4 @@ def main():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
