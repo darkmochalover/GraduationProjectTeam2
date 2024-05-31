@@ -31,12 +31,15 @@ def process():
     user_input_1=request.form['input1']
     user_input_2=request.form['input2']
     user_input_3=request.form['input3']
-    processed_result = process_input(user_input_1,user_input_2,user_input_3)
+    user_input_4=request.form['input4']
+    
+    processed_result = process_input(user_input_1,user_input_2,user_input_3,user_input_4)
     print(processed_result)
     session['processed_result'] = processed_result
     session['input_1'] = user_input_1
     session['input_2'] = user_input_2
     session['input_3'] = user_input_3
+    session['input_4'] = user_input_4
     
     return redirect(url_for('generate_image'))
 
@@ -64,9 +67,10 @@ def result():
     input1 = session.get('input_1', '')
     input2 = session.get('input_2', '')
     input3 = session.get('input_3', '')
+    input4 = session.get('input_4', '')
     processed_result = session.get('processed_result', '')
     
-    return render_template('new_result.html', input1=input1, input2=input2,input3=input3, processed_result=processed_result)
+    return render_template('new_result.html', input1=input1, input2=input2,input3=input3, input4=input4, processed_result=processed_result)
 
 @app.route('/image')
 def image():
@@ -78,7 +82,7 @@ def image():
 
 
 
-def process_input(input_data_1,input_data_2,input_data_3):
+def process_input(input_data_1,input_data_2,input_data_3,input_data_4):
     # 사용자로부터 입력 받기
     #user_input=input("들어가는 영화 첫번째 제목")
     #user_input_2=input("그 영화에 등장하는 인물")
@@ -90,9 +94,10 @@ def process_input(input_data_1,input_data_2,input_data_3):
     print(input_data_1)
     print(input_data_2)
     print(input_data_3)
+    print(input_data_4)
 
     # 가져온 정보를 기반으로 챗지피티에게 문장 전달 및 답변 받기
-    chat_input = f"너가 소설을 쓰는 작가라고 생각하고 {input_data_1}"+"에 등장하는 "+f"{input_data_2}"+"가 "+f"{input_data_3}"+"세계에 들어가면 어떻게 될지에 관한 소설만 적어줘. 최대한 길게 적어줘."+f"{input_data_1}"+"의 줄거리는 "+f"{movie_info_1}"+"이고 "+f"{input_data_3}"+"의 줄거리는 "+f"{movie_info_2}"+"야.\n"
+    chat_input = f"너가 소설을 쓰는 작가라고 생각하고 {input_data_1}"+"에 등장하는 "+f"{input_data_2}"+"가 "+f"{input_data_3}"+"세계에 들어가면 어떻게 될지에 관한 소설만 적어줘. 분위기는 "+f"{input_data_4}"+"이런 느낌으로 만들어줘. 최대한 길게 적어줘."+f"{input_data_1}"+"의 줄거리는 "+f"{movie_info_1}"+"이고 "+f"{input_data_3}"+"의 줄거리는 "+f"{movie_info_2}"+"야.\n"
     print(chat_input)
     chat_response = chat_with_gpt3(chat_input)
 
@@ -101,7 +106,7 @@ def process_input(input_data_1,input_data_2,input_data_3):
     score=mover_test_copy_update.get_score(chat_response)
     print(score)
     if (score<0.8):
-        chat_input = f"이전에 너가 써준 소설의 점수는 {score}야. 너가 소설을 쓰는 작가라고 생각하고 {input_data_1}"+"에 등장하는 "+f"{input_data_2}"+"가 "+f"{input_data_3}"+"세계에 들어가면 어떻게 될지에 관한 소설만 다시 적어줘. 최대한 길게 적어줘."+f"{input_data_1}"+"의 줄거리는 "+f"{movie_info_1}"+"이고 "+f"{input_data_3}"+"의 줄거리는 "+f"{movie_info_2}"+"야.\n"
+        chat_input = f"이전에 너가 써준 소설의 점수는 {score}야. 너가 소설을 쓰는 작가라고 생각하고 {input_data_1}"+"에 등장하는 "+f"{input_data_2}"+"가 "+f"{input_data_3}"+"세계에 들어가면 어떻게 될지에 관한 소설만 다시 적어줘. 분위기는 "+f"{input_data_4}"+"이런 느낌으로 만들어줘. 최대한 길게 적어줘."+f"{input_data_1}"+"의 줄거리는 "+f"{movie_info_1}"+"이고 "+f"{input_data_3}"+"의 줄거리는 "+f"{movie_info_2}"+"야.\n"
         print(chat_input)
         chat_response = chat_with_gpt3(chat_input)
         score=mover_test_copy_update.get_score(chat_response)
@@ -215,6 +220,8 @@ def main():
     user_input=input("들어가는 영화 첫번째 제목")
     user_input_2=input("그 영화에 등장하는 인물")
     user_input_3=input("배경이 되는 영화")
+    user_input_4=input("스토리 분위기")
+    
 
     #영화 정보 불러오기
     movie_info_1=movieData(user_input)
