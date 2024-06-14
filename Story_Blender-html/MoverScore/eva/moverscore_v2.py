@@ -25,7 +25,7 @@ device = get_device()
 if os.environ.get('MOVERSCORE_MODEL'):
     model_name = os.environ.get('MOVERSCORE_MODEL')
 else:
-    model_name = 'distilbert-base-uncased'
+    model_name = 'klue/roberta-large'
 tokenizer = AutoTokenizer.from_pretrained(model_name, do_lower_case=True)
 model = AutoModel.from_pretrained(model_name, output_hidden_states=True, output_attentions=True)
 model.eval()
